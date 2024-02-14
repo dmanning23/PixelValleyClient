@@ -4,8 +4,8 @@
     "version": "1.0.0",
     "main": "index.js",
     "scripts": {
-        "dev": "node esbuild/dev.server.js -w",
-        "build": "node esbuild/build.prod.js"
+        "dev": "node esbuild/dev.server.mjs -w",
+        "build": "node esbuild/build.prod.mjs"
     },
     "author": "Phaser Studio <support@phaser.io> (https://phaser.io/)",
     "repository": {

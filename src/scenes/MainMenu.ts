@@ -42,6 +42,10 @@ export class MainMenu extends Scene
                     uri: 'http://127.0.0.1:5000/graphql',
                     cache: new InMemoryCache(),
                 });
+                //swole ville 65bbcc69d9e6cf794859d192
+                //pirate village 6580b18f0b38cba6f29e3f88
+                //ninja village 659b4e1dd199ac6c4ab597c8
+                //spooksville 65b13e13041e78973118f97f
                 const results = await client.query({
                 query: gql`
                     {
@@ -54,20 +58,23 @@ export class MainMenu extends Scene
                                 name
                                 outsideAgents
                                 {
+                                    _id
                                     agentDescription
                                     {
-                                    resizedIconFilename
+                                        resizedIconFilename
                                     }
                                     name
                                     status
-                                            emoji
+                                    emoji
                                 }
                                 locations
                                 {
+                                    _id
                                     resizedImageFilename
                                     name
                                     allAgents
                                     {
+                                        _id
                                         agentDescription
                                         {
                                             resizedChibiFilename
@@ -81,16 +88,10 @@ export class MainMenu extends Scene
                         }
                     }`,
                 });
-                
-                //const outsideBackground = results.data.scenario.scenario.imageFilename
-                //this.load.image('outsideBackground', outsideBackground)
-                
+
                 this.scene.start("Overworld", results.data.scenario.scenario);
             };
             start();
-
-            //this.scene.start('Overworld');
-
         });
     }
 }

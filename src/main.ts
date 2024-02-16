@@ -2,6 +2,7 @@ import { Boot } from './scenes/Boot';
 import { Game as MainGame } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
 import { MainMenu } from './scenes/MainMenu';
+import { Overworld } from './scenes/Overworld.js';
 import { Preloader } from './scenes/Preloader';
 
 import { Game, Types } from "phaser";
@@ -10,8 +11,8 @@ import { Game, Types } from "phaser";
 //  https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config: Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    width: 1280,
-    height: 720,
+    width: 2048,
+    height: 1024,
     parent: 'game-container',
     backgroundColor: '#028af8',
     scale: {
@@ -22,6 +23,7 @@ const config: Types.Core.GameConfig = {
         Boot,
         Preloader,
         MainMenu,
+        Overworld,
         MainGame,
         GameOver
     ]

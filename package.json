@@ -18,7 +18,10 @@
     "homepage": "https://github.com/phaserjs/template-esbuild-ts#readme",
     "license": "MIT",
     "dependencies": {
-        "phaser": "^3.70.0"
+        "@apollo/client": "^3.9.5",
+        "graphql": "^16.8.1",
+        "phaser": "^3.70.0",
+        "react": "^18.2.0"
     },
     "devDependencies": {
         "@jgoz/esbuild-plugin-livereload": "^2.0.3",
@@ -28,5 +31,6 @@
         "esbuild-plugin-inline-image": "^0.0.9",
         "esbuild-serve": "^1.0.1",
         "typescript": "^5.3.3"
-    }
+    },
+    "outputCapture": "std"
 }

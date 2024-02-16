@@ -7,7 +7,7 @@ export class Preloader extends Scene
         super('Preloader');
     }
 
-    init ()
+    async init ()
     {
         //  We loaded this image in our Boot Scene, so we can display it here
         this.add.image(512, 384, 'background');
@@ -30,9 +30,9 @@ export class Preloader extends Scene
     preload ()
     {
         //  Load the assets for the game - Replace with your own assets
-        this.load.setPath('assets');
+        //this.load.setPath('assets');
 
-        this.load.image('logo', 'logo.png');
+        this.load.image('logo', './assets/logo.png');
     }
 
     create ()

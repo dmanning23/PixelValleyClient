@@ -1,4 +1,5 @@
 import { Scene, GameObjects } from 'phaser';
+import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
 export class MainMenu extends Scene
 {
@@ -13,6 +14,8 @@ export class MainMenu extends Scene
 
     create ()
     {
+        console.log("MainMenu create")
+
         this.background = this.add.image(this.cameras.main.centerX, 
             this.cameras.main.centerY, 
             'background');
@@ -31,8 +34,62 @@ export class MainMenu extends Scene
         }).setOrigin(0.5);
 
         this.input.once('pointerdown', () => {
+            console.log("nav to Overworld")
 
-            this.scene.start('Game');
+
+            const start = async () => {
+                const client = new ApolloClient({
+                    uri: 'http://127.0.0.1:5000/graphql',
+                    cache: new InMemoryCache(),
+                });
+                const results = await client.query({
+                query: gql`
+                    {
+                        scenario(id: "6580b18f0b38cba6f29e3f88")
+                        {
+                            success
+                            scenario
+                            {
+                                imageFilename
+                                name
+                                outsideAgents
+                                {
+                                    agentDescription
+                                    {
+                                    resizedIconFilename
+                                    }
+                                    name
+                                    status
+                                            emoji
+                                }
+                                locations
+                                {
+                                    resizedImageFilename
+                                    name
+                                    allAgents
+                                    {
+                                        agentDescription
+                                        {
+                                            resizedChibiFilename
+                                        }
+                                        name
+                                        status
+                                        emoji
+                                    }
+                                }
+                            }
+                        }
+                    }`,
+                });
+                
+                //const outsideBackground = results.data.scenario.scenario.imageFilename
+                //this.load.image('outsideBackground', outsideBackground)
+                
+                this.scene.start("Overworld", results.data.scenario.scenario);
+            };
+            start();
+
+            //this.scene.start('Overworld');
 
         });
     }

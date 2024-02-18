@@ -52,7 +52,7 @@ class Overworld extends Phaser.Scene
         let createLocation = function(location, x, y) {
             //add the image for the location
             let image = __this.add.image(x, y, location._id);
-            image.scale = 1
+            //image.scale = 1
 
             //TODO: add the chibi heads for characters that are inside
         };

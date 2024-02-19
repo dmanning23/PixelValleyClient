@@ -50,7 +50,7 @@ export class MainMenu extends Scene
                 const results = await client.query({
                 query: gql`
                     {
-                        scenario(id: "65d2692d22dcc866a3c70ab6")
+                        scenario(id: "6580b18f0b38cba6f29e3f88")
                         {
                             success
                             scenario

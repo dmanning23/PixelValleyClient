@@ -1,128 +1,82 @@
 import { Scene, GameObjects } from 'phaser';
-import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
-class Overworld extends Phaser.Scene
+class BuildingInterior extends Phaser.Scene
 {
     constructor ()
     {
-        super('Overworld');
+        super('BuildingInterior');
     }
 
-    init (scenario) 
+    init (config) 
     {
-        console.log("Overworld init")
-        this.scenario = scenario
+        console.log("BuildingInterior init")
+        this.scenario = config.scenario
+        this.location = config.location
     }
 
     preload () 
     {
-        console.log("Overworld preload")
+        console.log("BuildingInterior preload")
         
+        //TODO: error check that the location interior exists
         //Load the background image
-        this.load.image('outsideBackground', this.scenario.imageFilename);
+        let image = this.load.image(this.location._id, this.location.resizedImageInteriorFilename);
 
         //Load the location images
-        this.scenario.locations.forEach(location => {
-            //load the location image
-            this.load.image(`resizedImageFilename${location._id}`, location.resizedImageFilename)
+        if (this.location.locations) {
+            this.location.locations.forEach(childLocation => {
 
-            //Load the character chibis
-            location.allAgents.forEach(chibi => {
-                this.load.image(`resizedChibiFilename${chibi._id}`, chibi.agentDescription.resizedChibiFilename)
-            })
-        });
+                //TODO: error check that the location interior exists
+                //load the location image
+                this.load.image(childLocation._id, childLocation.imageInteriorFilename)
+
+                //Load the character chibis
+                childLocation.allAgents.forEach(chibi => {
+                    //TODO: error check that the chibi exists
+                    this.load.image(chibi._id, chibi.agentDescription.resizedChibiFilename)
+                })
+            });
+        }
 
         //Load the oustide character images
-        this.scenario.outsideAgents.forEach(agent => {
-            this.load.image(`resizedIconFilename${agent._id}`, agent.agentDescription.resizedIconFilename)
+        this.location.agents.forEach(agent => {
+            //TODO: error check that the iconFilename exists
+            this.load.image(agent._id, agent.agentDescription.iconFilename)
         })
     }
 
     create ()
     {
-        console.log("Overworld create")
+        console.log("BuildingInterior create")
 
         this.background = this.add.image(this.cameras.main.centerX, 
             this.cameras.main.centerY, 
-            'outsideBackground');
+            this.location._id);
         this.background.setDisplaySize(this.cameras.main.width, 
             this.cameras.main.height);
         
         var __this = this;
         let createLocation = function(location, x, y) {
             //add the image for the location
-            let image = __this.add.image(x, y, `resizedImageFilename${location._id}`);
-            image.setInteractive();
-            image.on('pointerdown', function() {
-                console.log("nav to location")
-                const start = async (location) => {
-                    const client = new ApolloClient({
-                        uri: 'http://127.0.0.1:5000/graphql',
-                        cache: new InMemoryCache(),
-                    });
-                    const results = await client.query({
-                        variables: { locationId: location._id },
-                        query: gql`
-                            query Location($locationId: ID!)
-                            {
-                                location(id: $locationId)
-                                {
-                                    success
-                                    location 
-                                    {
-                                        _id
-                                            resizedImageInteriorFilename
-                                        name
-                                        agents
-                                        {
-                                            _id
-                                            agentDescription
-                                            {
-                                                iconFilename
-                                            }
-                                            name
-                                            status
-                                                    emoji
-                                        }
-                                        locations
-                                        {
-                                            _id
-                                            imageInteriorFilename
-                                            name
-                                            allAgents
-                                            {
-                                                _id
-                                                agentDescription
-                                                {
-                                                    resizedChibiFilename
-                                                }
-                                                name
-                                                status
-                                                emoji
-                                            }
-                                        }
-                                    }
-                                },
-                            }`
-                        });
+            let image = __this.add.image(x, y, location._id);
 
-                    __this.scene.start("BuildingInterior", { location: results.data.location.location, scenario: __this.scenario });
-                };
-                start(location);
-            });
+            /*
+            image.on('pointerdown', function() {
+                //TODO: hit up GraphQL for the location info 
+            }, { location });
           
             image.on('pointerover', function() {
                 //this.strokeColor = 0xffffff; 
             });
           
             image.on('pointerout', function() { 
-            /*this.paletteCircle.strokeColor = 0x000000;
+            this.paletteCircle.strokeColor = 0x000000;
             if (gameState.selectedColor === this.color) {
                 for (let circle of gameState.paletteCircles) {
                 circle.strokeColor = 0x000000;
                 }
                 this.paletteCircle.strokeColor = 0xffc836; 
-            }*/
+            }
             }, { location })
 
             //add the chibi heads for characters that are inside
@@ -133,13 +87,14 @@ class Overworld extends Phaser.Scene
                 let chibiX = (x - (totalWidth / 2)) + (chibiWidth / 2)
                 let chibiY = y - 100
                 for (let i = 0; i < location.allAgents.length; i++) {
-                    let chibi = __this.add.image(chibiX, chibiY, `resizedChibiFilename${location.allAgents[i]._id}`);
+                    let chibi = __this.add.image(chibiX, chibiY, location.allAgents[i]._id);
                     chibi.scale *= 0.8
                     chibiX += chibiWidth
                 }
             }
+            */
         };
-        
+        /*
         //Add all the locations to the map
         let locationWidth = this.background.width / 4.5
         let locationHeight = this.background.height / 4.5
@@ -207,26 +162,25 @@ class Overworld extends Phaser.Scene
             //increment this so the chibis show up in the correct spot
             currentY += 132
         }
+        */
 
-        //Add the outside characters to the map
-        if (this.scenario.outsideAgents.length > 0) {
-            let chibiWidth = 148
-            let totalWidth = (chibiWidth * this.scenario.outsideAgents.length)
+        //Add the characters to the interior
+        if (this.location.agents.length > 0) {
+            let chibiWidth = 340
+            let totalWidth = (chibiWidth * this.location.agents.length)
             let chibiX = ((this.background.width / 2) - (totalWidth / 2)) + (chibiWidth / 2)
-            let chibiY = currentY
-            for (let i = 0; i < this.scenario.outsideAgents.length; i++) {
-                let chibi = __this.add.image(chibiX, chibiY, `resizedIconFilename${this.scenario.outsideAgents[i]._id}`);
-                chibi.scale *= 0.25
+            let chibiY = (this.background.height / 2) + 116
+            for (let i = 0; i < this.location.agents.length; i++) {
+                let chibi = __this.add.image(chibiX, chibiY, this.location.agents[i]._id);
+                chibi.scale *= 0.8
                 chibiX += chibiWidth
             }
         }
 
-        /*
         this.input.once('pointerdown', () => {
-            this.scene.start('Game');
+            this.scene.start("Overworld", this.scenario);
         });
-        */
     }
 }
 
-exports.Overworld = Overworld;
+exports.BuildingInterior = BuildingInterior;

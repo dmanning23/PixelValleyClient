@@ -1,8 +1,9 @@
 import { Boot } from './scenes/Boot';
 import { Game as MainGame } from './scenes/Game';
 import { GameOver } from './scenes/GameOver';
-import { MainMenu } from './scenes/MainMenu';
+import { MainMenu } from './scenes/MainMenu.js';
 import { Overworld } from './scenes/Overworld.js';
+import { BuildingInterior } from './scenes/BuildingInterior.js';
 import { Preloader } from './scenes/Preloader';
 
 import { Game, Types } from "phaser";
@@ -24,6 +25,7 @@ const config: Types.Core.GameConfig = {
         Preloader,
         MainMenu,
         Overworld,
+        BuildingInterior,
         MainGame,
         GameOver
     ]

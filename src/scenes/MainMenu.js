@@ -3,10 +3,6 @@ import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 
 export class MainMenu extends Scene
 {
-    background: GameObjects.Image;
-    logo: GameObjects.Image;
-    title: GameObjects.Text;
-
     constructor ()
     {
         super('MainMenu');
@@ -36,63 +32,64 @@ export class MainMenu extends Scene
         this.input.once('pointerdown', () => {
             console.log("nav to Overworld")
 
-
-            const start = async () => {
+            const start = async (scenarioId) => {
                 const client = new ApolloClient({
                     uri: 'http://127.0.0.1:5000/graphql',
                     cache: new InMemoryCache(),
                 });
-                //swole ville 65bbcc69d9e6cf794859d192
-                //pirate village 6580b18f0b38cba6f29e3f88
-                //ninja village 659b4e1dd199ac6c4ab597c8
-                //spooksville 65b13e13041e78973118f97f
-                //Ancient Greek City 65d2692d22dcc866a3c70ab6
+                
                 const results = await client.query({
-                query: gql`
-                    {
-                        scenario(id: "6580b18f0b38cba6f29e3f88")
-                        {
-                            success
-                            scenario
+                    variables: { scenarioId: scenarioId },
+                    query: gql`
+                        query Scenario($scenarioId: ID!) {
+                            scenario(id: $scenarioId)
                             {
-                                imageFilename
-                                name
-                                outsideAgents
+                                success
+                                scenario
                                 {
-                                    _id
-                                    agentDescription
-                                    {
-                                        resizedIconFilename
-                                    }
+                                    imageFilename
                                     name
-                                    status
-                                    emoji
-                                }
-                                locations
-                                {
-                                    _id
-                                    resizedImageFilename
-                                    name
-                                    allAgents
+                                    outsideAgents
                                     {
                                         _id
                                         agentDescription
                                         {
-                                            resizedChibiFilename
+                                            resizedIconFilename
                                         }
                                         name
                                         status
                                         emoji
                                     }
+                                    locations
+                                    {
+                                        _id
+                                        resizedImageFilename
+                                        name
+                                        allAgents
+                                        {
+                                            _id
+                                            agentDescription
+                                            {
+                                                resizedChibiFilename
+                                            }
+                                            name
+                                            status
+                                            emoji
+                                        }
+                                    }
                                 }
                             }
-                        }
-                    }`,
-                });
+                        }`,
+                    });
 
                 this.scene.start("Overworld", results.data.scenario.scenario);
             };
-            start();
+            start("6580b18f0b38cba6f29e3f88");
+            //swole ville 65bbcc69d9e6cf794859d192
+            //pirate village 6580b18f0b38cba6f29e3f88
+            //ninja village 659b4e1dd199ac6c4ab597c8
+            //spooksville 65b13e13041e78973118f97f
+            //Ancient Greek City 65d2692d22dcc866a3c70ab6
         });
     }
 }

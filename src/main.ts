@@ -5,6 +5,7 @@ import { MainMenu } from './scenes/MainMenu.js';
 import { Overworld } from './scenes/Overworld.js';
 import { BuildingInterior } from './scenes/BuildingInterior.js';
 import { Preloader } from './scenes/Preloader';
+import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin.js';
 
 import { Game, Types } from "phaser";
 
@@ -28,7 +29,14 @@ const config: Types.Core.GameConfig = {
         BuildingInterior,
         MainGame,
         GameOver
-    ]
+    ],
+    plugins: {
+        scene: [{
+            key: 'rexUI',
+            plugin: RexUIPlugin,
+            mapping: 'rexUI'
+        }]
+    }
 };
 
 export default new Game(config);

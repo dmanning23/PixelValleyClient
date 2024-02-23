@@ -49,6 +49,7 @@ export class MainMenu extends Scene
                                 {
                                     imageFilename
                                     name
+                                    description
                                     outsideAgents
                                     {
                                         _id

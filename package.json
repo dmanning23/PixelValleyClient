@@ -21,6 +21,7 @@
         "@apollo/client": "^3.9.5",
         "graphql": "^16.8.1",
         "phaser": "^3.70.0",
+        "phaser3-rex-plugins": "^1.80.0",
         "react": "^18.2.0"
     },
     "devDependencies": {

@@ -1,8 +1,9 @@
 import { Scene, GameObjects } from 'phaser';
 import { gql, ApolloClient, InMemoryCache } from '@apollo/client';
 import { CharacterProfile } from './CharacterProfile.js';
+import { BaseScene } from './BaseScene.js';
 
-class BuildingInterior extends Phaser.Scene
+class BuildingInterior extends BaseScene
 {
     constructor ()
     {
@@ -115,6 +116,144 @@ class BuildingInterior extends Phaser.Scene
                 });
             }
         }
+
+        //Add the exit button
+        let exit = this.createLabel(this, "<- Exit", 'left', '22px', 18)
+        exit.setInteractive();
+        exit.on('pointerdown', function() {
+            __this.scene.start("Overworld", __this.scenario);
+        })
+        this.rexUI.add.sizer({
+                x: 128, y: 48,
+                orientation: 'center'
+            })
+            .add(exit)
+            .layout()
+
+        let title = this.createLabel(this, this.location.name, 'center', '24px', 20)
+        title.setInteractive();
+        title.on('pointerdown', function() {
+            __this.createDialog(__this, __this.location.name, __this.location.description)
+        })
+        this.rexUI.add.sizer({
+                x: this.background.width/2, y: 48,
+                orientation: 'center'
+            })
+            .add(title)
+            .layout()
+
+        
+
+/*
+
+        var dialog = this.rexUI.add.dialog({
+            x: 800,
+            y: 600,
+            width: 500,
+
+            background: this.rexUI.add.roundRectangle(0, 0, 100, 100, 20, 0x1565c0),
+
+            title: this.createLabel2(this, 'Title').setDraggable(),
+
+            toolbar: [
+                this.createLabel2(this, 'O'),
+                this.createLabel2(this, 'X')
+            ],
+
+            leftToolbar: [
+                this.createLabel2(this, 'A'),
+                this.createLabel2(this, 'B')
+            ],  
+
+            content: this.createLabel2(this, 'Content'),
+
+            description: this.createLabel2(this, 'Description'),
+
+            choices: [
+                this.createLabel2(this, 'Choice0'),
+                this.createLabel2(this, 'Choice1'),
+                this.createLabel2(this, 'Choice2')
+            ],
+
+            actions: [
+                this.createLabel2(this, 'Action0'),
+                this.createLabel2(this, 'Action1')
+            ],
+
+            space: {
+                left: 20,
+                right: 20,
+                top: -20,
+                bottom: -20,
+
+                title: 25,
+                titleLeft: 30,
+                content: 25,
+                description: 25,
+                descriptionLeft: 20,
+                descriptionRight: 20,
+                choices: 25,
+
+                toolbarItem: 5,
+                choice: 15,
+                action: 15,
+            },
+
+            expand: {
+                title: false,
+                // content: false,
+                // description: false,
+                // choices: false,
+                // actions: true,
+            },
+
+            align: {
+                title: 'center',
+                // content: 'left',
+                // description: 'left',
+                // choices: 'left',
+                actions: 'right', // 'center'|'left'|'right'
+            },
+
+            click: {
+                mode: 'release'
+            }
+        })
+        .setDraggable('background')   // Draggable-background
+        .layout()
+        // .drawBounds(this.add.graphics(), 0xff0000)
+        .popUp(1000);
+
+        var tween = this.tweens.add({
+            targets: dialog,
+            scaleX: 1,
+            scaleY: 1,
+            ease: 'Bounce', // 'Cubic', 'Elastic', 'Bounce', 'Back'
+            duration: 1000,
+            repeat: 0, // -1: infinity
+            yoyo: false
+        });
+        */
+    }
+
+    createLabel2(scene, text) {
+        return scene.rexUI.add.label({
+            width: 40, // Minimum width of round-rectangle
+            height: 40, // Minimum height of round-rectangle
+          
+            background: scene.rexUI.add.roundRectangle(0, 0, 100, 40, 20, 0x5e92f3),
+    
+            text: scene.add.text(0, 0, text, {
+                fontSize: '24px'
+            }),
+    
+            space: {
+                left: 10,
+                right: 10,
+                top: 10,
+                bottom: 10
+            }
+        });
     }
 }
 
